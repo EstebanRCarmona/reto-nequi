@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME:apifranchises}
+  datasource:
+    url: ${DB_URL:jdbc:mysql://reto-nequidb.c4js2wy2epwf.us-east-1.rds.amazonaws.com/reto-nequidb}
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:PasswordDb.1}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /v3/api-docs
+  info:
+    title: Nuevo Nombre del Swagger
+    description: Descripción personalizada para tu API.
+    version: 1.0.0
