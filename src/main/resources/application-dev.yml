@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ${APPLICATION_NAME:apifranshises}
+    name: ${APPLICATION_NAME:apifranchises}
   datasource:
     url: ${DB_URL:jdbc:mysql://reto-nequidb.c4js2wy2epwf.us-east-1.rds.amazonaws.com/reto-nequidb}
     username: ${DB_USERNAME:admin}

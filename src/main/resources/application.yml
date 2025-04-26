@@ -1,6 +1,6 @@
 spring:
   application:
-    name: apifranshises
+    name: apifranchises
   profiles:
     active: dev
 server:
