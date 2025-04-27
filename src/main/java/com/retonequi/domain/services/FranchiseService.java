@@ -11,6 +11,7 @@ import com.retonequi.domain.model.Franchise;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import static com.retonequi.domain.util.ConstantsDomain.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,21 +22,21 @@ public class FranchiseService implements IFranchiseService {
     @Override
     public Mono<Franchise> createFranchise(String name) {
         if (name == null || name.isEmpty()) {
-            throw new ErrorBadRequest("Name cannot be null");
+            throw new ErrorBadRequest(ERR_NAME_NULL);
         }
         return franchisePersistence.findByName(name)
-            .flatMap(existing -> Mono.<Franchise>error(new ExceptionAlreadyExist("Franchise already exists")))
+            .flatMap(existing -> Mono.<Franchise>error(new ExceptionAlreadyExist(ERR_FRANCHISE_ALREADY_EXISTS)))
             .switchIfEmpty(franchisePersistence.save(new Franchise(null, name)));
     }
 
     @Override
     public Mono<Franchise> updateFranchiseName(Long id, String name) {
         if (name == null || name.isEmpty()) {
-            throw new ErrorBadRequest("Name cannot be null");
+            throw new ErrorBadRequest(ERR_NAME_NULL);
         }
 
         return franchisePersistence.findById(id)
-            .switchIfEmpty(Mono.error(new ErrorNotFound("Franchise not found: "+id)))
+            .switchIfEmpty(Mono.error(new ErrorNotFound(ERR_FRANCHISE_NOT_FOUND_ID + id)))
             .flatMap(existing -> franchisePersistence.updateName(id, name));
     }
 
