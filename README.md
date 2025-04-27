@@ -65,6 +65,8 @@ reto-nequi/
    ```bash
    ./gradlew bootRun
    ```
+   luego se abrira el swagger y desde alli poder interactuar con la api.
+   si no se abre, puedes ir manualmente a `http://localhost:7070/swagger-ui.html`
 
 ---
 
