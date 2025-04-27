@@ -6,8 +6,8 @@ import com.retonequi.domain.exception.ExceptionAlreadyExist;
 import com.retonequi.domain.exception.ErrorNotFound;
 import com.retonequi.domain.interfaces.IFranchisePersistence;
 import com.retonequi.domain.interfaces.IPaginator;
-import com.retonequi.domain.dto.PageResponse;
 import com.retonequi.domain.model.Franchise;
+import com.retonequi.domain.model.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -42,14 +42,8 @@ public class FranchiseService implements IFranchiseService {
 
     @Override
     public Mono<PageResponse<Franchise>> getAllFranchisesPaged(int page, int size) {
-        return Mono.zip(
-            paginator.count(),
-            paginator.findPage(page, size).collectList()
-        ).map(tuple -> {
-            long totalElements = tuple.getT1();
-            java.util.List<Franchise> content = tuple.getT2();
-            int totalPages = (int) Math.ceil((double) totalElements / size);
-            return new PageResponse<>(content, page, size, totalElements, totalPages);
-        });
+        return paginator.count()
+            .flatMap(total -> paginator.findPage(page, size).collectList()
+                .map(content -> new PageResponse<>(content, page, size, total, (int) Math.ceil((double) total / size))));
     }
 }

@@ -1,4 +1,4 @@
-package com.retonequi.domain.dto;
+package com.retonequi.domain.model;
 
 import java.util.List;
 
