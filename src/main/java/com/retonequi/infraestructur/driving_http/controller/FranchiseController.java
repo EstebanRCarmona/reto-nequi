@@ -1,8 +1,11 @@
 package com.retonequi.infraestructur.driving_http.controller;
 
 import com.retonequi.domain.model.Franchise;
-import com.retonequi.domain.dto.PageResponse;
 import com.retonequi.domain.interfaces.IFranchiseService;
+import com.retonequi.infraestructur.driving_http.dto.response.PageResponseDto;
+import com.retonequi.infraestructur.driving_http.mapper.PageResponseDtoMapper;
+import com.retonequi.infraestructur.util.ConstantsInfraestructure;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class FranchiseController {
     private final IFranchiseService franchiseService;
+    private final PageResponseDtoMapper pageResponseDtoMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -27,9 +31,10 @@ public class FranchiseController {
     }
 
     @GetMapping
-    public Mono<PageResponse<Franchise>> getAllFranchises(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        return franchiseService.getAllFranchisesPaged(page, size);
+    public Mono<PageResponseDto<Franchise>> getAllFranchisesPaged(
+            @RequestParam(defaultValue = ConstantsInfraestructure.DEFAULT_PAGE) int page,
+            @RequestParam(defaultValue = ConstantsInfraestructure.DEFAULT_SIZE) int size) {
+        return franchiseService.getAllFranchisesPaged(page, size)
+            .map(pageResponseDtoMapper::toDto);
     }
 }

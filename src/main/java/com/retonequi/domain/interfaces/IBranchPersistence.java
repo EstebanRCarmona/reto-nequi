@@ -8,4 +8,5 @@ public interface IBranchPersistence {
     Mono<Branch> save(Branch branch);
     Flux<Branch> findAll();
     Mono<Branch> findByNameIgnoreCase(String name);
+    Mono<Branch> findById(Long id);
 }
