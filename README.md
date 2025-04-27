@@ -1,7 +1,4 @@
-# Reto Nequi
-
-![Nequi Logo](https://upload.wikimedia.org/wikipedia/commons/4/4b/Logo_nequi_morado.png)
-
+# Reto nequi webflux
 ---
 
 ## 🚀 Descripción del Proyecto
@@ -9,9 +6,9 @@
 **Reto Nequi** es una aplicación de ejemplo para la gestión de  franquicias, sucursales y productos, desarrollada en Java con el stack reactive de Spring y Reactor. El objetivo es demostrar buenas prácticas de arquitectura hexagonal, pruebas unitarias y manejo de errores en un contexto de dominio bancario/financiero.
 
 La aplicación ofrece servicios para:
-- Crear y actualizar franquicias.
-- Crear sucursales asociadas a franquicias.
-- Agregar productos a sucursales y actualizar su stock.
+- Crear, obtener paginado y actualizar franquicias.
+- Crear y obtener paginadas sucursales asociadas a franquicias.
+- Agregar productos a sucursales, obtener productos de sucursales paginado y actualizar su stock.
 - Consultar productos con mayor stock por sucursal y franquicia.
 
 ---
@@ -21,12 +18,14 @@ La aplicación ofrece servicios para:
 ```
 reto-nequi/
 ├── src/
-│   ├── main/java/com/retonequi/domain/...
-│   └── test/java/com/retonequi/domain/...
+│   ├── main/java/com/retonequi/
+│   │   ├── domain/           # Lógica de negocio y entidades del dominio
+│   │   ├── application/       # Lógica de aplicación (excepciones de aplicación)
+│   │   └── infrastructure/   # Adaptadores de infraestructura (controladores, repositorios, utilidades externas)
+│   └── test/java/com/retonequi/domain/services/ # Pruebas unitarias de servicios de dominio
 ├── build.gradle
 ├── README.md
 └── ...
-```
 
 ---
 
@@ -62,7 +61,7 @@ reto-nequi/
    ./gradlew test
    ```
 4. **(Opcional) Corre la aplicación:**
-   Si tienes un entrypoint (por ejemplo, un main o un endpoint REST), puedes correrlo con:
+   Puedes correrlo con:
    ```bash
    ./gradlew bootRun
    ```
@@ -80,7 +79,3 @@ Las pruebas unitarias cubren todos los casos de negocio relevantes, incluyendo v
 - Si tienes dudas o sugerencias, ¡no dudes en abrir un issue o un pull request!
 
 ---
-
-<div align="center">
-  <b>Hecho con 💜 para el reto Nequi</b>
-</div>
