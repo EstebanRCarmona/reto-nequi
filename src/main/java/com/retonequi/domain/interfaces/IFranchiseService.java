@@ -1,7 +1,8 @@
 package com.retonequi.domain.interfaces;
 
-import com.retonequi.domain.dto.PageResponse;
 import com.retonequi.domain.model.Franchise;
+import com.retonequi.domain.model.PageResponse;
+
 import reactor.core.publisher.Mono;
 
 public interface IFranchiseService {

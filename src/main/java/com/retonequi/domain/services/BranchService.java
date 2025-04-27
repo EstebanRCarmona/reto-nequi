@@ -1,15 +1,14 @@
 package com.retonequi.domain.services;
 
-import com.retonequi.domain.dto.BranchWithFranchiseDto;
-import com.retonequi.domain.dto.PageResponse;
 import com.retonequi.domain.exception.ErrorBadRequest;
 import com.retonequi.domain.exception.ErrorNotFound;
 import com.retonequi.domain.exception.ExceptionAlreadyExist;
 import com.retonequi.domain.interfaces.IBranchPersistence;
 import com.retonequi.domain.interfaces.IBranchService;
 import com.retonequi.domain.interfaces.IFranchisePersistence;
-import com.retonequi.domain.interfaces.IPaginator;
 import com.retonequi.domain.model.Branch;
+import com.retonequi.domain.model.PageResponse;
+import com.retonequi.domain.model.responses.BranchWithFranchise;
 import com.retonequi.domain.util.ConstantsDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import reactor.core.publisher.Mono;
 public class BranchService implements IBranchService {
     private final IBranchPersistence branchPersistence;
     private final IFranchisePersistence franchisePersistence;
-    private final IPaginator<Branch> paginator;
 
     @Override
     public Mono<Branch> createBranch(String name, Long franchiseId) {
@@ -37,18 +35,19 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public Mono<PageResponse<BranchWithFranchiseDto>> getAllBranchesWithFranchisePaged(int page, int size) {
-        return Mono.zip(
-            paginator.count(),
-            paginator.findPage(page, size)
-                .flatMap(branch -> franchisePersistence.findById(branch.getFranchiseId())
-                        .map(franchise -> new BranchWithFranchiseDto(branch.getId(), branch.getName(), franchise)))
-                .collectList()
-        ).map(tuple -> {
-            long totalElements = tuple.getT1();
-            java.util.List<BranchWithFranchiseDto> content = tuple.getT2();
-            int totalPages = (int) Math.ceil((double) totalElements / size);
-            return new PageResponse<>(content, page, size, totalElements, totalPages);
-        });
+    public Mono<PageResponse<BranchWithFranchise>> getAllBranchesWithFranchisePaged(int page, int size) {
+        return branchPersistence.findAll()
+            .flatMap(branch -> franchisePersistence.findById(branch.getFranchiseId())
+                .map(franchise -> new BranchWithFranchise(branch, franchise))
+            )
+            .collectList()
+            .map(list -> {
+                int totalElements = list.size();
+                int totalPages = (int) Math.ceil((double) totalElements / size);
+                int fromIndex = Math.max(0, Math.min((page - 1) * size, totalElements));
+                int toIndex = Math.max(0, Math.min(fromIndex + size, totalElements));
+                java.util.List<BranchWithFranchise> pagedList = list.subList(fromIndex, toIndex);
+                return new PageResponse<>(pagedList, page, size, totalElements, totalPages);
+            });
     }
 }

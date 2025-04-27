@@ -1,6 +1,5 @@
-package com.retonequi.domain.dto;
+package com.retonequi.infraestructur.driving_http.dto.response;
 
-import com.retonequi.domain.model.Branch;
 import com.retonequi.domain.model.Franchise;
 import lombok.AllArgsConstructor;
 import lombok.Data;

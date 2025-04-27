@@ -50,4 +50,9 @@ public class BranchPersistenceAdapter implements IBranchPersistence, IPaginator<
                 .next()
                 .map(branchEntityMapper::toModel);
     }
+
+    @Override
+    public Mono<Branch> findById(Long id) {
+        return branchRepository.findById(id).map(branchEntityMapper::toModel);
+    }
 }

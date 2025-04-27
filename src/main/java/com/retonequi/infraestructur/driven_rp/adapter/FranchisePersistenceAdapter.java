@@ -2,11 +2,11 @@ package com.retonequi.infraestructur.driven_rp.adapter;
 
 import com.retonequi.domain.interfaces.IFranchisePersistence;
 import com.retonequi.domain.interfaces.IPaginator;
-import com.retonequi.domain.dto.PageResponse;
 import com.retonequi.domain.model.Franchise;
 import com.retonequi.infraestructur.driven_rp.entity.FranchiseEntity;
 import com.retonequi.infraestructur.driven_rp.mapper.FranchiseEntityMapper;
 import com.retonequi.infraestructur.driven_rp.persistence.IFranchiseRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
