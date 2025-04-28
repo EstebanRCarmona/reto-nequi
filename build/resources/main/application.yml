@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: apifranchises
-  profiles:
-    active: dev
-server:
-  port: 7070

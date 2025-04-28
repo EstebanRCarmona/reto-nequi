@@ -5,6 +5,8 @@ spring:
     url: ${DB_URL:r2dbc:mysql://reto-nequidb.c4js2wy2epwf.us-east-1.rds.amazonaws.com/reto_nequidb}
     username: ${DB_USERNAME:admin}
     password: ${DB_PASSWORD:PasswordDb.1}
+server:
+  port: 7070
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -15,3 +17,8 @@ springdoc:
     title: Nuevo Nombre del Swagger
     description: Descripción personalizada para tu API.
     version: 1.0.0
+logging:
+  level:
+    org.springframework.web: TRACE
+    org.springframework.web.reactive.result.method.annotation: TRACE
+    org.springframework.web.reactive.result.handler.RequestMappingHandlerMapping: DEBUG
