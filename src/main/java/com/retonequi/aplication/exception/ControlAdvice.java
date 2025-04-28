@@ -5,47 +5,48 @@ import com.retonequi.domain.exception.ErrorNotFound;
 import com.retonequi.domain.exception.ExceptionAlreadyExist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
 @RestControllerAdvice
 public class ControlAdvice {
 
     @ExceptionHandler(ErrorBadRequest.class)
-    public ResponseEntity<ExceptionResponse> handleBadRequest(ErrorBadRequest ex, HttpServletRequest request) {
+    public Mono<ResponseEntity<ExceptionResponse>> handleBadRequest(ErrorBadRequest ex, ServerWebExchange exchange) {
         ExceptionResponse response = new ExceptionResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage(),
-                request.getRequestURI(),
-                request.getMethod(),
+                exchange.getRequest().getPath().toString(),
+                exchange.getRequest().getMethod().name(),
                 Instant.now().toString()
         );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response));
     }
 
     @ExceptionHandler(ExceptionAlreadyExist.class)
-    public ResponseEntity<ExceptionResponse> handleAlreadyExist(ExceptionAlreadyExist ex, HttpServletRequest request) {
+    public Mono<ResponseEntity<ExceptionResponse>> handleAlreadyExist(ExceptionAlreadyExist ex, ServerWebExchange exchange) {
         ExceptionResponse response = new ExceptionResponse(
                 HttpStatus.CONFLICT.value(),
                 ex.getMessage(),
-                request.getRequestURI(),
-                request.getMethod(),
+                exchange.getRequest().getPath().toString(),
+                exchange.getRequest().getMethod().name(),
                 Instant.now().toString()
         );
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(response));
     }
 
     @ExceptionHandler(ErrorNotFound.class)
-public ResponseEntity<ExceptionResponse> handleNotFound(ErrorNotFound ex, HttpServletRequest request) {
-    ExceptionResponse response = new ExceptionResponse(
-            HttpStatus.NOT_FOUND.value(),
-            ex.getMessage(),
-            request.getRequestURI(),
-            request.getMethod(),
-            Instant.now().toString()
-    );
-    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-}
+    public Mono<ResponseEntity<ExceptionResponse>> handleNotFound(ErrorNotFound ex, ServerWebExchange exchange) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                exchange.getRequest().getPath().toString(),
+                exchange.getRequest().getMethod().name(),
+                Instant.now().toString()
+        );
+        return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(response));
+    }
 }

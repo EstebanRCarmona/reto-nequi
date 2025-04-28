@@ -75,6 +75,60 @@ Las pruebas unitarias cubren todos los casos de negocio relevantes, incluyendo v
 
 ---
 
+## 🚢 Despliegue con Docker y Terraform
+
+### 🐳 Docker
+
+1. **Construcción de la imagen:**
+   ```sh
+   docker build -t reto-nequi-api:webflux .
+   ```
+2. **Login en ECR:**
+   ```sh
+   aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "uri del repositorio en ecr"
+   ```
+3. **Taggear y subir la imagen:**
+   ```sh
+   docker tag reto-nequi-api:webflux "uri del ecr"
+   docker push "la imagen que se tagueo anteriormente"
+   ```
+
+### ☁️ Terraform (Infraestructura en AWS)
+
+1. **Pre-requisitos:**
+   - Tener [Terraform](https://www.terraform.io/downloads.html) instalado.
+   - Tener configuradas las credenciales de AWS (`aws configure`).
+2. **Variables:**
+   - Edita el archivo `terraform.tfvars` con los valores de tu entorno (VPC, subnets, etc).
+3. **Inicializa y aplica:**
+   ```sh
+   cd terraform
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+4. **IMPORTANTE:**
+   - **Antes de aplicar Terraform, debes subir manualmente la imagen Docker al repositorio ECR.**
+   - Luego, asegúrate de actualizar la referencia de la imagen en el bloque `image` de la definición de task en Terraform (`main.tf`). Ejemplo:
+     ```hcl
+     image = "861286622325.dkr.ecr.us-east-1.amazonaws.com/reto-nequi-api:webflux"
+     ```
+
+5. **Recursos creados:**
+   - ECS Cluster y Service
+   - Application Load Balancer (ALB)
+   - API Gateway HTTP
+   - SSM Parameter Store (variables de entorno)
+   - CloudWatch Log Group
+   - Security Groups
+
+6. **Destrucción:**
+   ```sh
+   terraform destroy
+   ```
+
+---
+
 ## 💡 Notas Adicionales
 - El diseño sigue principios de arquitectura hexagonal y separación de capas.
 - El código está preparado para ser fácilmente extensible y testeable.
